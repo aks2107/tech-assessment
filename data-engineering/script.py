@@ -44,10 +44,10 @@ def read_member_info():
 def read_member_paid_info():
     """
     This function reads the information from the memberPaidInfo.csv file into a dictionary for quick lookups.
-    Returns: A dictionary with transaction data.
+    Returns: A list of dictionaries with transaction data.
     """
 
-    transactions = {} # Initialize empty transactions dictionary
+    transactions = [] # Initialize list of dictionaries
     with open(MEMBERPAIDINFO_FILE, 'r') as file:
         reader = csv.DictReader(file)
         for row in reader:
@@ -58,9 +58,12 @@ def read_member_paid_info():
                 t_price = float(row['price']) # Convert price to floating number
             except ValueError: # If the price value cannot be converted to floating number
                 continue # Skip that data and move to next
-            transactions.append({ # Append to transactions dictionary
+            transactions.append({ # Append to transactions list
                 'id': t_id,
                 'name': t_name,
                 'price': t_price
             })
     return transactions
+
+def main():
+    
