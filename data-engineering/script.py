@@ -66,4 +66,37 @@ def read_member_paid_info():
     return transactions
 
 def main():
-    
+    check_directories() # Check to make sure directories and files exist before moving on
+    members = read_member_info() # Get dictionary of members
+    transactions = read_member_paid_info() # Get list of transactions
+    total_paid = 0.0
+    clean_rows = []
+    highest_payer = {'name': None, 'paid_amount': 0.0, 'id': None}
+    for row in transactions:
+        payment_id = row['id']
+        payment_name = row['name']
+        payment_amount = row['price']
+        if payment_id not in members: # Check if ID exists in member list
+            continue # Skip ID if not associated with member
+        if members[payment_id].upper() != payment_name.upper(): # Check if names match without capitalization issues
+            continue # Skip name if not associated with member
+        total_paid += payment_amount # Add to total paid count
+        if payment_amount > highest_payer['paid_amount']:
+            highest_payer = {'name': payment_name, 'paid_amount': payment_amount, 'id': payment_id} # Update highest paid data
+        clean_rows.append({ # Add valid member information to clean list
+            'member_id': payment_id,
+            'member_name': payment_name,
+            'paid_amount': payment_amount
+        })
+    with open(OUTPUT_FILE, 'w', newline='') as file:
+        columns = ['member_id', 'member_name', 'paid_amount']
+        writer = csv.DictWriter(file, columns)
+        writer.writeheader() # Make the first line in the file the column names
+        writer.writerows(clean_rows) # The rest of the rows in the file are the clean data
+    # Print out some insights about the clean data
+    print(f"Total clean rows: {len(clean_rows)}")
+    print(f"Total Paid Amount: ${total_paid}")
+    print(f"Highest Payer: {highest_payer['name']}, ID: {highest_payer['id']}, Amount: {highest_payer['paid_amount']}")
+
+if __name__ == "__main__":
+    main()
