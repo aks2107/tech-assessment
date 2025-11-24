@@ -30,8 +30,8 @@ interface WeatherData {
     forecastday: Array<{
       date: string; // Date of forecast
       day: {
-        avg_c: number; // Average Celsius temp
-        avg_f: number; // Average Fahrenheit temp
+        avgtemp_c: number; // Average Celsius temp
+        avgtemp_f: number; // Average Fahrenheit temp
         condition: {
           text: string; // Icon description
           icon: string; // Icon image
@@ -48,7 +48,7 @@ interface WeatherData {
   templateUrl: './app.component.html',
 })
 
-export class AppComponent implements OnInit { // Make class available to other files
+export class AppComponent{ // Make class available to other files
   weatherData: WeatherData | null = null; 
   isCelsius: boolean = true;
   loading: boolean = false; // check for loading data
@@ -81,16 +81,14 @@ export class AppComponent implements OnInit { // Make class available to other f
   }
 
   // This method is used to switch between Celsius and Fahrenheit
-  toggleTemperatureUnit() {
+  toggleTemperatureUnit(){
     this.isCelsius = !this.isCelsius;
   }
 
   // This method handles the function of when a user clicks search after typing in a city
-  onSearch() {
-    if (this.searchQuery.trim()) {
+  onSearch(){
+    if (this.searchQuery.trim()){
       this.loadWeatherByCity(this.searchQuery.trim());
     }
   }
 }
-
-
