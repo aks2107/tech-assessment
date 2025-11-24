@@ -62,7 +62,7 @@ def read_member_paid_info():
                 continue # Skip that data and move to next
             transactions.append({ # Append to transactions list
                 'ID': t_id,
-                'name': t_name,
+                'fullName': t_name,
                 'paidAmount': t_price
             })
     return transactions
@@ -80,18 +80,18 @@ def main():
     """
     
     check_directories() # Check to make sure directories and files exist before moving on
-    members = read_member_info() # Get dictionary of members
-    transactions = read_member_paid_info() # Get list of transactions
+    members = read_member_info() # Get all the members
+    transactions = read_member_paid_info() # Get all the transactions
     total_paid = 0.0
     clean_entries = []
     highest_payer = {'fullName': None, 'paidAmount': 0.0, 'memberID': None}
     for row in transactions:
         payment_id = row['ID']
-        payment_name = row['name']
+        payment_name = row['fullName']
         payment_amount = row['paidAmount']
         if payment_id not in members: # Check if ID exists in member list
             continue # Skip ID if not associated with member
-        if members[payment_id].upper() != payment_name.upper(): # Check if names match without capitalization issues
+        if (members[payment_id].upper() != payment_name.upper()) and (payment_name != '') and (members[payment_id] != ''): # Check if names match without capitalization issues
             continue # Skip name if not associated with member
         total_paid += payment_amount # Add to total paid count
         if payment_amount > highest_payer['paidAmount']:
@@ -101,6 +101,8 @@ def main():
             'fullName': payment_name,
             'paidAmount': payment_amount
         })
+    for entry in clean_entries:
+        print(entry)
     with open(OUTPUT_FILE, 'w', newline='') as file:
         columns = ['memberID', 'fullName', 'paidAmount']
         writer = csv.DictWriter(file, columns)
