@@ -1,59 +1,64 @@
 # WeatherApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.6.
+This project is a weather application built with Angular and Tailwind CSS. This app allows users to search for a city's current weather conditions, the forecast for the next day, and switch between Celsius and Fahrenheit.
 
-## Development server
+## Features:
 
-To start a local development server, run:
+- Search for a city's weather forecast by name.
+- View current forecast and icon image with description.
+- View tomorrow's forecast.
+- Switch between Celsius and Fahrenheit.
 
-```bash
-ng serve
+## Important Prerequisites:
+
+Before you begin, make sure the following is installed:
+
+- Node.js 
+- Angular CLI
+
+### Installation:
+
+Clone the repository:
+```
+git clone https://github.com/aks2107/tech-assessment.git
+cd weather-app
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+Install the Dependencies:
+```
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### API Key:
+This project uses WeatherAPI.com. Without an API key this program will not work.
 
-```bash
-ng generate --help
-```
+1. Get a free API Key:
+    - Sign up with an account at WeatherAPI.com.
+    - Copy your API Key from the dashboard.
 
-## Building
+2. Setup Environment File:
+    - Go to the src/environments/ folder.
+    - Locate the file named environment.example.ts.
+    - Copy this file into environment.ts.
+        ```
+        cp src/environments/environment.example.ts src/environments/environment.ts
+    - Open the environment.ts file
+    - Replace the placeholder text ```'YOUR_API_KEY_HERE'``` with your API key.
 
-To build the project run:
+### How to Run Locally:
 
-```bash
-ng build
-```
+1. Start the server by typing this into terminal
+    ```
+    ng serve 
+    ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+2. Open the app:
+    - Open your browser and go to ```http://localhost:4200```
+    - If the app is missing buttons and looks plain, do the following:
+        - Check if Tailwind CSS is installed correctly.
+        - Do ```Ctrl + C``` in terminal to close app.
+        - Run ```ng serve``` again.
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+#### Contact Information:
+- Email: abinswar7@gmail.com
+- LinkedIn: https://www.linkedin.com/in/aveinn-swar/
