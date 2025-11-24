@@ -1,0 +1,23 @@
+# --- Python Basics ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+
+# Virtual Environments (highly recommended if you use them later)
+venv/
+env/
+.env
+
+# --- Operating System ---
+# Mac
+.DS_Store
+# Windows
+Thumbs.db
+
+# --- Project Specific ---
+# Ignore the generated output files
+data-engineering/output/
+
+# Optional: Ignore input data if it is large or sensitive
+# (Uncomment the line below if you don't want to commit the source CSVs)
+# data-engineering/data/
