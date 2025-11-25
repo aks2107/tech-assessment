@@ -42,7 +42,7 @@ graph TB
     
     %% Traffic Flows
     INTERNET[Internet] ==>|HTTPS 443| IGW
-    INTERNET ==>|SSH 22 (Restricted)| IGW
+    INTERNET ==>|SSH 22 Restricted| IGW
     
     IGW -->|Route Table: Public| BASTION
     IGW -->|Route Table: Public| ALB_NODE
