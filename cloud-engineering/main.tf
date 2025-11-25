@@ -36,3 +36,30 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 }
+
+# Create Public Subnet
+resource "aws_subnet" "public" {
+  count                   = length(local.azs)
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(local.vpc_cidr, 8, count.index) // Adds 8 bits to netmask(10.0.0.0/24, 10.0.1.0/24)
+  availability_zone       = local.azs[count.index]
+  map_public_ip_on_launch = true // Public IP
+}
+
+# Private App Subnets
+resource "aws_subnet" "private_app" {
+  count             = length(local.azs)
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(local.vpc_cidr, 8, count.index + 2) # 10.0.2.0/24, 10.0.3.0/24
+  availability_zone = local.azs[count.index]
+}
+
+# Private Data Subnets
+resource "aws_subnet" "private_data" {
+  count             = length(local.azs)
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(local.vpc_cidr, 8, count.index + 4) # 10.0.4.0/24, 10.0.5.0/24
+  availability_zone = local.azs[count.index]
+}
+
+
