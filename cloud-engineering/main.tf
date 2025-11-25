@@ -105,7 +105,7 @@ resource "aws_route_table" "private_app" {
     cidr_block = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat[count.index].id
   }
-  tags = merge(local.common_tags, { Name = "private-app-route-${count.index + 1}" })
+  tags = merge(local.common_tags, {Name = "private-app-route-${count.index + 1}"})
 }
 
 resource "aws_route_table_association" "private_app" {
@@ -118,7 +118,7 @@ resource "aws_route_table_association" "private_app" {
 resource "aws_route_table" "private_data" {
   vpc_id = aws_vpc.main.id
   # No route to 0.0.0.0/0
-  tags = merge(local.common_tags, { Name = "private-data-route" })
+  tags = merge(local.common_tags, {Name = "private-data-route"})
 }
 
 resource "aws_route_table_association" "private_data" {
@@ -127,3 +127,91 @@ resource "aws_route_table_association" "private_data" {
   route_table_id = aws_route_table.private_data.id
 }
 
+# Bastion SG: Allows SSH from Internet
+resource "aws_security_group" "bastion_sg" {
+  name = "bastion-sg"
+  description = "Security group for Bastion Host"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["96.250.8.229/32"] # Restricts to my IP so add in your own for it work
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = merge(local.common_tags, {Name = "bastion-sg"})
+}
+
+# Load Balancer SG
+resource "aws_security_group" "alb_sg" {
+  name = "alb-sg"
+  description = "Security group for Public Load Balancer"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# App Tier SG: Accepts traffic ONLY from ALB and Bastion
+resource "aws_security_group" "app_sg" {
+  name = "app-sg"
+  description = "Security group for App Tier"
+  vpc_id = aws_vpc.main.id
+
+  # Allow HTTP/HTTPS from ALB
+  ingress {
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    security_groups = [aws_security_group.alb_sg.id]
+  }
+  
+  # Allow SSH from Bastion
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    security_groups = [aws_security_group.bastion_sg.id]
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Data Tier SG: Accepts traffic ONLY from App Tier
+resource "aws_security_group" "data_sg" {
+  name = "data-sg"
+  description = "Security group for Data Tier"
+  vpc_id = aws_vpc.main.id
+
+  # Allow Database traffic from App SG
+  ingress {
+    from_port = 3306
+    to_port = 3306
+    protocol = "tcp"
+    security_groups = [aws_security_group.app_sg.id]
+  }
+  tags = merge(local.common_tags, {Name = "data-sg"})
+}
