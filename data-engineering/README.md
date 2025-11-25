@@ -1,6 +1,6 @@
 # Data Engineering Assignment D0
 
-## This project implements an ETL data processing pipeline using Python. The script focuses on reading two input files, memberInfo.csv and memberPaidInfo.csv, and creates an output file, cleanData.csv, that contains information about member ID, member name, and paid amount.
+This project implements an ETL data processing pipeline using Python. The script focuses on reading two input files, `memberInfo.csv` and `memberPaidInfo.csv`, and creates an output file, `cleanData.csv`, that contains information about member ID, member name, and paid amount.
 
 ## Important Prerequisites:
 Before you begin, make sure the following is installed and ready:
