@@ -5,7 +5,7 @@
 ## Important Prerequisites:
 Before you begin, make sure the following is installed and ready:
 - Python
-- Python Libraries ('csv' and 'os')
+- Standard Python Libraries ('csv' and 'os')
 
 ## Project Structure
 ```text
