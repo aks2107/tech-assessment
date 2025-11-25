@@ -1,8 +1,9 @@
 import csv
 import os
 
-DATA_DIR = 'data-engineering/data'
-OUTPUT_DIR = 'data-engineering/output'
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) # Dynamic path to fix issue of file path breaking script
+DATA_DIR = os.path.join(SCRIPT_DIR, 'data')
+OUTPUT_DIR = os.path.join(SCRIPT_DIR, 'output')
 MEMBERINFO_FILE = os.path.join(DATA_DIR, 'memberInfo.csv') # This allows the path to working on any OS such as Windows or Mac
 MEMBERPAIDINFO_FILE = os.path.join(DATA_DIR, 'memberPaidInfo.csv')
 OUTPUT_FILE = os.path.join(OUTPUT_DIR, 'cleanData.csv')
@@ -108,7 +109,7 @@ def main():
         writer = csv.DictWriter(file, columns)
         writer.writeheader() # Make the first line in the file the column names
         writer.writerows(clean_entries) # The rest of the rows in the file are the clean entries
-    # Print out some insights about the clean entires
+    # Print out some insights about the clean entries
     print(f"Total Clean Entries: {len(clean_entries)}")
     print(f"Total Paid Amount: ${total_paid}")
     print(f"Highest Payer Name: {highest_payer['fullName']}, ID: {highest_payer['memberID']}, Paid Amount: ${highest_payer['paidAmount']}")
